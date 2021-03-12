@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name='corona-taiou',
+    name='coronataiou',
     version='0.1',
-    packages=['corona-taiou'],
+    packages=['coronataiou'],
     url='https://github.com/joooooooooe-star/corona-taiou-webapp',
     license='MIT',
     author='joseph',
