@@ -1,10 +1,10 @@
+# TODO: Write test
+"""
 import os
 import tempfile
 
 import pytest
 import requests
-
-from coronataiou import app, dbutils
 
 
 @pytest.fixture
@@ -19,3 +19,4 @@ def client():
 
     os.close(db_fd)
     os.unlink(app.app.config['DATABASE'])
+"""
