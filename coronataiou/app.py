@@ -14,21 +14,14 @@ from datetime import datetime, timedelta
 
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///healthdata.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
-ma.init_app(app)
+app.config["DEBUG"] = True
 
-records_schema = RecordSchema(many=True)
-
-with app.app_context():
-    """Initializes the database"""
-    db.create_all()
-
+# Flask-WTF requires an enryption key - the string can be anything
+app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
 
 # Flask-Bootstrap requires this line
 Bootstrap(app)
+
 # +++++++++++++++++++++++
 # forms with Flask-WTF
 
@@ -177,10 +170,25 @@ def edit_result():
                 ), 'error')
         return render_template('edit_or_delete.html', form1=form1, record_datas=record_data, choice='edit')
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error_temperature.html', pagetitle="404 Error - Page Not Found", pageheading="Page not found (Error 404)", error=e), 404
 
+@app.errorhandler(405)
+def form_not_posted(e):
+    return render_template('error_temperature.html', pagetitle="405 Error - Form Not Submitted", pageheading="The form was not submitted (Error 405)", error=e), 405
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('error_temperature.html', pagetitle="500 Error - Internal Server Error", pageheading="Internal server error (500)", error=e), 500
+
+# +++++++++++++++++++++++
+
+
+@app.route('/api/v1/name', methods=['GET'])
+def api_name():
+    if 'name' not in request.args:
+        return "Please provide a name."
 
 @app.route('/api/user/<string:name>', methods=['GET'])
 def get_name(name):
