@@ -1,6 +1,7 @@
 """Contains all the database models to be used"""
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from datetime import datetime
 
 db = SQLAlchemy()
 ma = Marshmallow()
@@ -14,7 +15,7 @@ class RecordData(db.Model):
     fatigue = db.Column(db.Boolean)
     sore_throat = db.Column(db.Boolean)
     other_pain = db.Column(db.Boolean)
-    updated = db.Column(db.DateTime)
+    updated = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, name, temperature, fatigue, sore_throat, other_pain, updated):
         self.name = name
@@ -25,7 +26,14 @@ class RecordData(db.Model):
         self.updated = updated
 
 
-class RecordSchema(ma.Schema):
+class RecordSchema(ma.SQLAlchemySchema):
     class Meta:
         # Return everything but id and update time
-        fields = ("name", "temperature", "fatigue", "sore_throat", "other_pain")
+        model = RecordData
+
+    name = ma.auto_field()
+    temperature = ma.auto_field()
+    fatigue = ma.auto_field()
+    sore_throat = ma.auto_field()
+    other_pain = ma.auto_field()
+    updated = ma.auto_field()
