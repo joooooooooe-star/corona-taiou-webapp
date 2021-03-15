@@ -43,7 +43,7 @@
 	  <!-- but only one will be visible, depending on how the template
   		   was opened -->
 
-	  <!-- ----- start delete sock content ----- -->
+	  <!-- ----- start delete content ----- -->
 
 	  {% if choice == 'delete' %}
 
@@ -54,7 +54,7 @@
 
 		  <p class="ml-4">No. <a href="{{ url_for( 'select_record', letters='AF' ) }}">Return to the selection page.</a></p>
 
-		<!-- table showing the selected sock -->
+		<!-- table showing the selected  -->
 		<table class="table">
 			<tr>
 				<th>Name</th>
@@ -65,7 +65,7 @@
 				<th>Updated</th>
 			</tr>
 
-			<!-- just one sock here -->
+			<!-- just one here -->
 			<tr>
 				<td>{{ record_data.name }}</td>
 				<td>{{ record_data.temperature }}</td>
@@ -88,12 +88,12 @@
 		<!-- end form -->
 
 
-		<!-- ----- end delete sock content ----- -->
+		<!-- ----- end delete  	ontent ----- -->
 		{% else %}
 
-		<!-- ----- start edit sock content ----- -->
+		<!-- ----- start edit  content ----- -->
 
-		<p class="lead alert alert-success">Edit the selected sock below.</p>
+		<p class="lead alert alert-success">Edit the selected below.</p>
 
 		<!-- links -->
 		<p><a href="{{ url_for('index') }}">Return to the index.</a></p>

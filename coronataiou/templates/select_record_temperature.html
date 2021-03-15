@@ -24,7 +24,7 @@ Select Data
 
       <p class="lead alert alert-success">Select one data to edit or delete.</p>
 
-	  <!-- links to display a group of socks, alphabetically -->
+	  <!-- links to display a group of alphabetically -->
 	  <ul class="pl-0">
 		  <li class="text-center list-group-item list-group-item-action"><a href="{{ url_for( 'select_record', letters='AF' ) }}">A &ndash; E</a></li>
 		  <li class="text-center list-group-item list-group-item-action"><a href="{{ url_for( 'select_record', letters='FM' ) }}">F &ndash; L</a></li>
@@ -47,7 +47,7 @@ Select Data
 				<th>Other pain</th>
 			</tr>
 
-			<!-- here is a for-loop to give us all the socks -->
+			<!-- here is a for-loop to give us all the -->
 			{% for record_data in record_datas %}
 			<tr>
 				<td class="center-align"><input type="radio" name="id" value="{{ record_data.id }}" required></td>
