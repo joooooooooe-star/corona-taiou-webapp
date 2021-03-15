@@ -38,7 +38,9 @@ def get_date(year, month, day):
 
     # timezone adjustment
     converted_date = converted_date - timedelta(hours=9)
+
     next_day = converted_date + timedelta(days=1)
+
     query_res = RecordData.query.filter(RecordData.updated >= converted_date).filter(RecordData.updated < next_day).all()
     return jsonify(records_schema.dump(query_res))
 
