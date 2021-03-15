@@ -143,24 +143,24 @@ def edit_result():
     # call up the record from the database
     record_datas = record_data.query.filter(record_data.id == id).first()
     # update all values
-    record_data.name = request.form['name']
-    record_data.temperature = request.form['temperature']
-    record_data.fatigue = request.form['fatigue']
-    record_data.sore_throat = request.form['sore_throat']
-    record_data.other_pain = request.form['other_pain']
+    record_datas.name = request.form['name']
+    record_datas.temperature = request.form['temperature']
+    record_datas.fatigue = request.form['fatigue']
+    record_datas.sore_throat = request.form['sore_throat']
+    record_datas.other_pain = request.form['other_pain']
     # get today's date from function, above all the routes
-    record_data.updated = stringdate()
+    record_datas.updated = stringdate()
 
     form1 = AddRecord()
     if form1.validate_on_submit():
         # update database record
         db.session.commit()
         # create a message to send to the template
-        message = f"The data for sock {record_data.name} has been updated."
+        message = f"The data for sock {record_datas.name} has been updated."
         return render_template('result.html', message=message)
     else:
         # show validaton errors
-        record_data.id = id
+        record_datas.id = id
         # see https://pythonprogramming.net/flash-flask-tutorial/
         for field, errors in form1.errors.items():
             for error in errors:
@@ -168,7 +168,7 @@ def edit_result():
                     getattr(form1, field).label.text,
                     error
                 ), 'error')
-        return render_template('edit_or_delete.html', form1=form1, record_datas=record_data, choice='edit')
+        return render_template('edit_or_delete.html', form1=form1, record_data=record_datas, choice='edit')
 
 @app.errorhandler(404)
 def page_not_found(e):
