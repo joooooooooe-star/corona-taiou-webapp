@@ -1,6 +1,9 @@
-"""Contains the database schema and object model"""
+"""Contains all the database models to be used"""
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
+
 db = SQLAlchemy()
+ma = Marshmallow()
 
 
 class RecordData(db.Model):
@@ -20,3 +23,9 @@ class RecordData(db.Model):
         self.sore_throat = sore_throat
         self.other_pain = other_pain
         self.updated = updated
+
+
+class RecordSchema(ma.Schema):
+    class Meta:
+        # Return everything but id and update time
+        fields = ("name", "temperature", "fatigue", "sore_throat", "other_pain")
