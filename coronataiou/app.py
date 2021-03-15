@@ -104,7 +104,7 @@ def add_record():
 # select a record to edit or delete
 @app.route('/select_record/<letters>')
 def select_record(letters):
-    # alphabetical lists by sock name, chunked by letters between _ and _
+    # alphabetical lists by name, chunked by letters between _ and _
     # .between() evaluates first letter of a string
     a, b = list(letters)
     record_datas = record_data.query.filter(record_data.name.between(a, b)).order_by(record_data.name).all()
@@ -156,7 +156,7 @@ def edit_result():
         # update database record
         db.session.commit()
         # create a message to send to the template
-        message = f"The data for sock {record_datas.name} has been updated."
+        message = f"The data for {record_datas.name} has been updated."
         return render_template('result.html', message=message)
     else:
         # show validaton errors
