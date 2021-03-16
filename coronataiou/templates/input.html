@@ -11,27 +11,78 @@
 
 </head>
 
+<!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/home">GALILEO CO. LTD.</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/home">Home
+                    <span class="sr-only">(current)</span>
+                  </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
+<br>
+<br>
 
 </head>
 
 {% block content %}
-<h2>Enter your details</h2>
-<form action="" method="post">
-    <p>
-        {{form.name.label}}<br>
-        {{form.name(size=30)}}
-    </p>
-    <p>
-        {{form.temperature.label}}<br>
-        {{form.name(size=30)}}
-    </p>
-    <p>
-        {{form.condition.label}}<br>
-        {{form.condition}}
-    </p>
-    <p>{{form.submit()}}</p>
-</form>
+
+    <body>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 col-xl-9 mx-auto">
+            <div class="card card-signin flex-row my-5">
+              <div class="card-img-left d-none d-md-flex">
+                 <!-- Background image for card set in CSS! -->
+              </div>
+              <div class="card-body">
+                <h5 class="card-title text-center">Please enter your details</h5>
+                <form class="form-signin">
+                      <p>
+                            {{form.name.label}}<br>
+                            {{form.name(size=30)}}</p>
+                      <p>
+                            {{form.temperature.label}}<br>
+                            {{form.name(size=30)}}
+                      </p>
+                      <p>
+                            {{form.condition.label}}<br>
+                            {{form.condition}}
+                      </p>
+                      <p>
+                            {{form.condition1.label}}<br>
+                            {{form.condition}}
+                      </p>
+                      <p>
+                            {{form.condition2.label}}<br>
+                            {{form.condition}}
+                      </p>
+                      <br>
+                      <p>{{form.submit()}}</p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
 </html>
 
 {% endblock %}
