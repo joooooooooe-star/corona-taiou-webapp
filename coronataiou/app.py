@@ -1,6 +1,6 @@
 """The entry point for the application"""
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from coronataiou.models import db, ma, RecordData, RecordSchema
 from datetime import datetime, timedelta
 
@@ -17,6 +17,11 @@ records_schema = RecordSchema(many=True)
 with app.app_context():
     """Initializes the database"""
     db.create_all()
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
 @app.route('/api/user/<string:name>', methods=['GET'])
