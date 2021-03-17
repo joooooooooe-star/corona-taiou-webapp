@@ -1,12 +1,14 @@
 """The entry point for the application"""
 
 from flask import Flask, jsonify, render_template
-from coronataiou.models import db, ma, RecordData, RecordSchema
 from datetime import datetime, timedelta
 
+from coronataiou.models import db, ma, RecordData, RecordSchema
+from coronataiou.forms import DatePickerForm
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
+app.config['SECRET_KEY'] = 'muh_secrets'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///healthdata.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
@@ -22,6 +24,20 @@ with app.app_context():
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/pickdate', methods=['GET', 'POST'])
+def pick_date():
+    """leads to a form where the date can be selected"""
+    form = DatePickerForm()
+    if form.validate_on_submit():
+        # TODO: Get data and search database
+        pass
+
+    return render_template('date.html', form=form)
+
+
+"""Start of the API Routes"""
 
 
 @app.route('/api/user/<string:name>', methods=['GET'])
