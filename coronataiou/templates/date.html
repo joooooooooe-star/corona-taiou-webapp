@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="" method="POST" name="dateform">
+    <h3>Select a date range:</h3>
+    {{ form.csrt_token }}
+    {{ form.startdate.label }} {{form.startdate(class="DatePickerForm")}} {{form.hidden_tag()}}
+    {{ form.enddate.label }} {{form.enddate(class="DatePickerForm")}} {{form.hidden_tag()}}
+    <p>
+        {{form.submit()}}
+    </p>
+
+</form>
+
+{% endblock %}
