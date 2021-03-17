@@ -37,3 +37,17 @@ class RecordSchema(ma.SQLAlchemySchema):
     sore_throat = ma.auto_field()
     other_pain = ma.auto_field()
     updated = ma.auto_field()
+
+
+class IdRecordSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = RecordData
+
+    id = ma.auto_field()
+    name = ma.auto_field()
+    temperature = ma.auto_field()
+    fatigue = ma.auto_field()
+    sore_throat = ma.auto_field()
+    other_pain = ma.auto_field()
+    updated = ma.auto_field()
+
