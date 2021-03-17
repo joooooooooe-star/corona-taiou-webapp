@@ -1,6 +1,6 @@
 """The entry point for the application"""
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request, flash
 from datetime import datetime, timedelta
 
 from coronataiou.models import db, ma, RecordData, RecordSchema
@@ -30,9 +30,15 @@ def index():
 def pick_date():
     """leads to a form where the date can be selected"""
     form = DatePickerForm()
-    if form.validate_on_submit():
+    if form.is_submitted():
+        result = request.form
+        db_res = get_week_data(result)
+        if not db_res:
+            flash("no data found")
         # TODO: Get data and search database
-        pass
+        else:
+            flash("found ur data")
+        return render_template('date.html', form=form)
 
     return render_template('date.html', form=form)
 
@@ -64,6 +70,14 @@ def get_date(year, month, day):
 
     query_res = RecordData.query.filter(RecordData.updated >= converted_date).filter(RecordData.updated < next_day).all()
     return jsonify(records_schema.dump(query_res))
+
+
+def get_week_data(result: dict) -> dict:
+    convert_start = datetime.strptime(result["startdate"], "%Y-%m-%d")
+    convert_end = datetime.strptime(result["enddate"], "%Y-%m-%d")
+    query_res = RecordData.query.filter(RecordData.updated >= convert_start).filter(RecordData.updated <= convert_end).all()
+
+    return query_res
 
 
 if __name__ == '__main__':
