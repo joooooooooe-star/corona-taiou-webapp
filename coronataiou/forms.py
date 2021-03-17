@@ -7,7 +7,6 @@ from wtforms import SubmitField
 
 class DatePickerForm(Form):
     """A simple form for picking the date"""
-    startdate = DateField("Start Date", format='%Y-%m-%m')
-    enddate = DateField("End Date", format='%Y-%m-%m')
+    startdate = DateField("Start Date", format='%m-%d-%Y')
+    enddate = DateField("End Date", format='%m-%d-%Y')
     submit = SubmitField('Search')
-
