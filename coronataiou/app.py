@@ -1,20 +1,12 @@
 """The entry point for the application"""
 
-from flask import Flask, render_template, request, flash, url_for,  jsonify
 from datetime import datetime, timedelta
-from flask import Flask, render_template, request, flash, url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, flash
 from flask_bootstrap import Bootstrap
+from flask import request, jsonify
 
-from flask_wtf import FlaskForm
-from wtforms import SubmitField, SelectField, RadioField, HiddenField, StringField, IntegerField, FloatField
-from wtforms.validators import InputRequired, Length, Regexp, NumberRange
-from datetime import date
-from flask import request, jsonify, g
-
-from coronataiou.form import AddRecord, DeleteForm, stringdate
+from coronataiou.form import AddRecord
 from coronataiou.models import db, ma, RecordData, RecordSchema
-from coronataiou import dbutils
 
 
 app = Flask(__name__)
@@ -23,10 +15,17 @@ app.config["DEBUG"] = True
 # Flask-WTF requires an enryption key - the string can be anything
 app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///healthdata.db'
+db.init_app(app)
+ma.init_app(app)
 
-# Flask-Bootstrap requires this line
+records_schema = RecordSchema(many=True)
+
+with app.app_context():
+    """Initializes the database"""
+    db.create_all()
+
 Bootstrap(app)
-
 
 @app.route('/')
 @app.route('/home')
@@ -48,12 +47,14 @@ def add_record():
         fatigue = request.form['fatigue']
         sore_throat = request.form['sore_throat']
         other_pain = request.form['other_pain']
-        updated = stringdate()
 
-        record_datas = RecordData(name, temperature, fatigue, sore_throat, other_pain, updated)
+        print("hello")
 
-        db.session.add.__init__(record_datas)
-        db.session.commit.__init__()
+        record_datas = RecordData(name, temperature, fatigue, sore_throat, other_pain)
+        print(record_datas)
+
+        db.session.add(record_datas)
+        db.session.commit()
 
         message = f"THe data for {name} has been submitted"
 

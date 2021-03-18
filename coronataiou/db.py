@@ -13,10 +13,10 @@ class RecordData(db.Model):
     other_pain = db.Column(db.Boolean)
     updated = db.Column(db.DateTime)
 
-    def __init__(self, name, temperature, fatigue, sore_throat, other_pain, updated):
-        self.name = name
-        self.temperature = temperature
-        self.fatigue = fatigue
-        self.sore_throat = sore_throat
-        self.other_pain = other_pain
-        self.updated = updated
+    # def __init__(self, name, temperature, fatigue, sore_throat, other_pain, updated):
+    #     self.name = name
+    #     self.temperature = temperature
+    #     self.fatigue = fatigue
+    #     self.sore_throat = sore_throat
+    #     self.other_pain = other_pain
+    #     self.updated = updated
