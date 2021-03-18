@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class = "container">
+    <table>
+        <tr>
+            {% for col in cols %}
+            <th scope="col">{{ col }}</th>
+            {% endfor %}
+            </tr>
+       </tr>
+        {% for datum in data %}
+            <tr>
+            {% for col in cols %}
+            <td>
+                {{ datum[col] }}
+            </td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+
+    </table>
+</div>
+{% endblock content %}
