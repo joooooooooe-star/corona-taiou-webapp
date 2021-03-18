@@ -1,13 +1,11 @@
 """The entry point for the application"""
 
 from flask import Flask, render_template, request, flash, url_for,  jsonify
-from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 
-from coronataiou.form import AddRecord, DeleteForm
+from coronataiou.form import AddRecord, DeleteForm, stringdate
 from coronataiou.models import db, ma, RecordData, RecordSchema
-
 
 
 app = Flask(__name__)
@@ -15,34 +13,22 @@ app.config["DEBUG"] = True
 
 # Flask-WTF requires an enryption key - the string can be anything
 app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Flask-Bootstrap requires this line
 Bootstrap(app)
 
-# +++++++++++++++++++++++
-# forms with Flask-WTF
-
-# form for add_record and edit_or_delete
-# each field includes validation requirements and messages
-
-
-
-
-def stringdate():
-    today = date.today()
-    date_list = str(today).split('-')
-    # build string in format 01-01-2000
-    date_string = date_list[1] + "-" + date_list[2] + "-" + date_list[0]
-    return date_string
 
 @app.route('/')
 @app.route('/home')
 def index():
     return render_template('index.html')
 
+
 @app.route('/about')
 def about():
     return render_template('about.html')
+
 
 @app.route('/add_record', methods=['GET','POST'])
 def add_record():
@@ -53,20 +39,17 @@ def add_record():
         fatigue = request.form['fatigue']
         sore_throat = request.form['sore_throat']
         other_pain = request.form['other_pain']
-
         updated = stringdate()
 
         record_datas = RecordData(name, temperature, fatigue, sore_throat, other_pain, updated)
 
-        db.session.add(record_datas)
-        db.session.commit()
+        db.session.add.__init__(record_datas)
+        db.session.commit.__init__()
 
         message = f"THe data for {name} has been submitted"
 
         return render_template('add_record_temperature.html', message=message)
     else:
-        # show validaton errors
-        # see https://pythonprogramming.net/flash-flask-tutorial/
         for field, errors in form1.errors.items():
             for error in errors:
                 flash("Error in {}: {}".format(
@@ -148,9 +131,11 @@ def add_record():
 def page_not_found(e):
     return render_template('error_temperature.html', pagetitle="404 Error - Page Not Found", pageheading="Page not found (Error 404)", error=e), 404
 
+
 @app.errorhandler(405)
 def form_not_posted(e):
     return render_template('error_temperature.html', pagetitle="405 Error - Form Not Submitted", pageheading="The form was not submitted (Error 405)", error=e), 405
+
 
 @app.errorhandler(500)
 def internal_server_error(e):
@@ -163,6 +148,7 @@ def internal_server_error(e):
 def api_name():
     if 'name' not in request.args:
         return "Please provide a name."
+
 
 @app.route('/api/user/<string:name>', methods=['GET'])
 def get_name(name):
