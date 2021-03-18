@@ -1,6 +1,6 @@
 """The entry point for the application"""
 
-from flask import Flask, jsonify, render_template, request, flash
+from flask import Flask, jsonify, render_template, request, flash, abort
 from datetime import datetime, timedelta
 
 from coronataiou.models import db, ma, RecordData, RecordSchema, IdRecordSchema
@@ -36,7 +36,6 @@ def pick_date():
         db_res = get_week_data(result)
         if not db_res:
             flash("no data found")
-        # TODO: Get data and search database
         else:
             data = id_records_schema.dump(db_res)
             cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
@@ -45,6 +44,15 @@ def pick_date():
         return render_template('date.html', form=form)
 
     return render_template('date.html', form=form)
+
+
+@app.route('/edittable/', methods=['GET', 'POST'])
+def edit_table():
+    if 'edit' in request.args:
+        return f"not yet implemented for edit"
+    if 'remove' in request.args:
+        return f"not yet implemented for remove"
+    abort(403)
 
 
 """Start of the API Routes"""
