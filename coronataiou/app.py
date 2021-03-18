@@ -1,11 +1,20 @@
 """The entry point for the application"""
 
 from flask import Flask, render_template, request, flash, url_for,  jsonify
-from flask_bootstrap import Bootstrap
 from datetime import datetime, timedelta
+from flask import Flask, render_template, request, flash, url_for
+from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
+
+from flask_wtf import FlaskForm
+from wtforms import SubmitField, SelectField, RadioField, HiddenField, StringField, IntegerField, FloatField
+from wtforms.validators import InputRequired, Length, Regexp, NumberRange
+from datetime import date
+from flask import request, jsonify, g
 
 from coronataiou.form import AddRecord, DeleteForm, stringdate
 from coronataiou.models import db, ma, RecordData, RecordSchema
+from coronataiou import dbutils
 
 
 app = Flask(__name__)
@@ -126,22 +135,8 @@ def add_record():
 #                     error
 #                 ), 'error')
 #         return render_template('edit_or_delete.html', form1=form1, record_data=record_datas, choice='edit')
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error_temperature.html', pagetitle="404 Error - Page Not Found", pageheading="Page not found (Error 404)", error=e), 404
-
-
-@app.errorhandler(405)
-def form_not_posted(e):
-    return render_template('error_temperature.html', pagetitle="405 Error - Form Not Submitted", pageheading="The form was not submitted (Error 405)", error=e), 405
-
-
-@app.errorhandler(500)
-def internal_server_error(e):
-    return render_template('error_temperature.html', pagetitle="500 Error - Internal Server Error", pageheading="Internal server error (500)", error=e), 500
-
 # +++++++++++++++++++++++
+
 
 
 @app.route('/api/v1/name', methods=['GET'])
