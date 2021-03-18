@@ -3,7 +3,7 @@
 from flask import Flask, jsonify, render_template, request, flash
 from datetime import datetime, timedelta
 
-from coronataiou.models import db, ma, RecordData, RecordSchema
+from coronataiou.models import db, ma, RecordData, RecordSchema, IdRecordSchema
 from coronataiou.forms import DatePickerForm
 
 app = Flask(__name__)
@@ -15,6 +15,7 @@ db.init_app(app)
 ma.init_app(app)
 
 records_schema = RecordSchema(many=True)
+id_records_schema = IdRecordSchema(many=True)
 
 with app.app_context():
     """Initializes the database"""
@@ -37,7 +38,10 @@ def pick_date():
             flash("no data found")
         # TODO: Get data and search database
         else:
+            data = id_records_schema.dump(db_res)
+            cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
             flash("found ur data")
+            return render_template('edittable.html', data=data, cols=cols)
         return render_template('date.html', form=form)
 
     return render_template('date.html', form=form)
@@ -73,8 +77,8 @@ def get_date(year, month, day):
 
 
 def get_week_data(result: dict) -> dict:
-    convert_start = datetime.strptime(result["startdate"], "%Y-%m-%d")
-    convert_end = datetime.strptime(result["enddate"], "%Y-%m-%d")
+    convert_start = datetime.strptime(result["startdate"], "%Y-%m-%d") - timedelta(hours=9)
+    convert_end = datetime.strptime(result["enddate"], "%Y-%m-%d") + timedelta(hours=13)
     query_res = RecordData.query.filter(RecordData.updated >= convert_start).filter(RecordData.updated <= convert_end).all()
 
     return query_res

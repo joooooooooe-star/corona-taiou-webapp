@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+
 <form action="" method="POST" name="dateform">
     <h3>Select a date range:</h3>
     {{ form.csrt_token }}
@@ -8,7 +9,7 @@
     <p>
         {{form.submit()}}
     </p>
-
+</div>
 
 </form>
 {% with messages = get_flashed_messages() %}
