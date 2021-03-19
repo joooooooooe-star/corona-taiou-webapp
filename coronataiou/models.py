@@ -12,9 +12,9 @@ class RecordData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     temperature = db.Column(db.Float)
-    fatigue = db.Column(db.Boolean)
-    sore_throat = db.Column(db.Boolean)
-    other_pain = db.Column(db.Boolean)
+    fatigue = db.Column(db.String(3))
+    sore_throat = db.Column(db.String(3))
+    other_pain = db.Column(db.String(3))
     updated = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, name, temperature, fatigue, sore_throat, other_pain, updated):
