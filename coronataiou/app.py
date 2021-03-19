@@ -16,6 +16,7 @@ ma.init_app(app)
 
 records_schema = RecordSchema(many=True)
 id_records_schema = IdRecordSchema(many=True)
+id_record_schema = IdRecordSchema()
 
 with app.app_context():
     """Initializes the database"""
@@ -27,32 +28,38 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/pickdate', methods=['GET', 'POST'])
-def pick_date():
-    """leads to a form where the date can be selected"""
-    form = DatePickerForm()
-    if form.is_submitted():
-        result = request.form
-        db_res = get_week_data(result)
-        if not db_res:
-            flash("no data found")
-        else:
-            data = id_records_schema.dump(db_res)
-            cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
-            flash("found ur data")
-            return render_template('edittable.html', data=data, cols=cols)
-        return render_template('date.html', form=form)
-
-    return render_template('date.html', form=form)
-
-
 @app.route('/edittable/', methods=['GET', 'POST'])
 def edit_table():
+
+    if request.method == "POST":
+        return "not yet implemented"
+
     if 'edit' in request.args:
+        # TODO: Link to input form with fields filled out
+        id_data = RecordData.query.filter(RecordData.id == request.args['lineIdEdit'])
         return f"not yet implemented for edit"
+
     if 'remove' in request.args:
-        return f"not yet implemented for remove"
-    abort(403)
+        cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
+        data = RecordData.query.filter_by(id=int(request.args['lineIdEdit'])).first()
+        data = id_record_schema.dump(data)
+        return render_template('delete.html', data=data, col=cols)
+
+    else:
+        form = DatePickerForm()
+        if form.is_submitted():
+            # TODO: Add validators
+            result = request.form
+            db_res = get_week_data(result)
+            if not db_res:
+                flash("no data found")
+            else:
+                data = id_records_schema.dump(db_res)
+                cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
+                flash("found ur data")
+                return render_template('edittable.html', data=data, cols=cols)
+
+        return render_template('date.html', form=form)
 
 
 """Start of the API Routes"""
