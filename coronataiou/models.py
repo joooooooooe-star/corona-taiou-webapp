@@ -17,13 +17,13 @@ class RecordData(db.Model):
     other_pain = db.Column(db.String(3))
     updated = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, name, temperature, fatigue, sore_throat, other_pain, updated):
+    def __init__(self, name, temperature, fatigue, sore_throat, other_pain, **kwargs):
+        super(RecordData, self).__init__(**kwargs)
         self.name = name
         self.temperature = temperature
         self.fatigue = fatigue
         self.sore_throat = sore_throat
         self.other_pain = other_pain
-        self.updated = updated
 
 
 class ChangedRecordData(db.Model):

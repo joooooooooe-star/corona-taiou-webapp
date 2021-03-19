@@ -1,0 +1,148 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block styles %}
+{{ super() }}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+</head>
+{% endblock %}
+
+
+{% block title %}
+	{% if choice == 'delete' %}
+		Delete a Data
+	{% elif choice == 'edit' %}
+		Edit a Data
+	{% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+  <div class="row pb-5">
+    <div class="col-lg-10 mx-lg-auto">
+
+      <h1 class="pt-5 pb-2">
+		{% if choice == 'delete' %}
+	  		Delete a Data
+	  	{% elif choice == 'edit' %}
+	  		Edit a Data
+	  	{% endif %}
+	  </h1>
+	  <!-- ----- THIS TEMPLATE HAS TWO FORMS ----- -->
+	  <!-- but only one will be visible, depending on how the template
+  		   was opened -->
+
+	  <!-- ----- start delete content ----- -->
+
+	  {% if choice == 'delete' %}
+
+	      <p class="lead alert alert-danger">Are you sure you want to delete this data?</p>
+
+		  <!-- links -->
+		  <p class="ml-4">No. <a href="{{ url_for('index') }}">Return to the index.</a></p>
+
+		  <p class="ml-4">No. <a href="{{ url_for( 'select_record', letters='AF' ) }}">Return to the selection page.</a></p>
+
+		<!-- table showing the selected  -->
+		<table class="table">
+			<tr>
+				<th>Name</th>
+				<th>Temperature</th>
+				<th>Fatigue</th>
+				<th>Sore throat</th>
+				<th>Other pain</th>
+				<th>Updated</th>
+			</tr>
+
+			<!-- just one here -->
+			<tr>
+				<td>{{ record_data.name }}</td>
+				<td>{{ record_data.temperature }}</td>
+				<td>{{ record_data.fatigue }}</td>
+				<td>${{ record_data.sore_throat }}</td>
+				<td>{{ record_data.other_pain }}</td>
+				<td>{{ record_data.updated }}</td>
+			</tr>
+
+		</table>
+
+
+		<!-- start form for deleting record - not quickform but still WTForms -->
+  		<form action="{{ url_for('delete_result') }}" method="POST" id="delete">
+			{{ form2.csrf_token }}
+			{{ form2.id_field(value=delete_data.id) }}
+			{{ form2.purpose(value='delete') }}
+			{{ form2.submit(class="btn btn-danger space-below-btn") }}
+		</form>
+		<!-- end form -->
+
+
+		<!-- ----- end delete  	ontent ----- -->
+		{% else %}
+
+		<!-- ----- start edit  content ----- -->
+
+		<p class="lead alert alert-success">Edit the selected below.</p>
+
+		<!-- links -->
+		<p><a href="{{ url_for('index') }}">Return to the index.</a></p>
+
+		<p><a href="{{ url_for( 'select_record', letters='AF' ) }}">Return to the selection page.</a></p>
+
+		<!-- show flash - based on WTForms validators
+			 see https://pythonprogramming.net/flash-flask-tutorial/
+			 get_flashed_messages() exists here because of flash()
+			 in the route function
+			 -->
+			 {% with errors = get_flashed_messages() %}
+				 {% if errors %}
+					 {% for err in errors %}
+					 <div class="alert alert-danger alert-dismissible" role="alert">
+						 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+						 {{ err }}
+					 </div>
+					 {% endfor %}
+				 {% endif %}
+			 {% endwith %}
+		<!-- end of flash -->
+
+		<!-- start form for editing record
+			 correct use of WTF Bootstrap styles -->
+		<form method="post" action="{{ url_for('edit_result') }}" id="update">
+			{{ form1.csrf_token }}
+			{{ form1.id_field(value=record_data.id) }}
+			{{ wtf.form_field(form1.name, value=record_data.name) }}
+			{{ wtf.form_field(form1.temperature) }}
+			{{ wtf.form_field(form1.fatigue, value=record_data.fatigue) }}
+			{{ wtf.form_field(form1.sore_throat, value=record_data.sore_throat) }}
+			{{ wtf.form_field(form1.other_pain, value=record_data.other_pain) }}
+			{{ wtf.form_field(form1.submit, button_map={'submit':'success'}) }}
+		</form>
+
+		<script>
+		// this JavaScript fixes the style choice in the select element
+		// without this, the current value is not shown in the menu
+		if ( document.querySelector('select') ) {
+			document.querySelector('select').value = "{{ record_data.style }}";
+		}
+		</script>
+
+		{% endif %}
+
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
