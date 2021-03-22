@@ -4,9 +4,8 @@ from flask import Flask, jsonify, render_template, request, flash, abort
 from flask_bootstrap import Bootstrap
 from datetime import datetime, timedelta
 
-from coronataiou.form import AddRecord
 from coronataiou.models import db, ma, RecordData, RecordSchema, IdRecordSchema
-from coronataiou.forms import DatePickerForm
+from coronataiou.forms import AddRecord, DatePickerForm
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -48,15 +47,12 @@ def add_record():
         sore_throat = request.form['sore_throat']
         other_pain = request.form['other_pain']
 
-        print("hello")
+        record_data = RecordData(name, temperature, fatigue, sore_throat, other_pain)
 
-        record_datas = RecordData(name, temperature, fatigue, sore_throat, other_pain)
-        print(record_datas)
-
-        db.session.add(record_datas)
+        db.session.add(record_data)
         db.session.commit()
 
-        message = f"THe data for {name} has been submitted"
+        message = f"The data for {name} has been submitted"
 
         return render_template('add_record_temperature.html', message=message)
     else:
