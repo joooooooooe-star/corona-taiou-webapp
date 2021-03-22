@@ -69,39 +69,49 @@ def add_record():
         return render_template('add_record_temperature.html', form1=form1)
 
 
-@app.route('/edittable/', methods=['GET', 'POST'])
-def edit_table():
+@app.route('/edit', methods=['GET', 'POST'])
+def edit_table(data=None, cols=None):
+    """The endpoint containing the feature to edit and remove data"""
 
-    if request.method == "POST":
-        return "not yet implemented"
+    form = DatePickerForm()
 
-    if 'edit' in request.args:
-        # TODO: Link to input form with fields filled out
-        id_data = RecordData.query.filter(RecordData.id == request.args['lineIdEdit'])
-        return f"not yet implemented for edit"
+    if all(["startdate" in request.args, "enddate" in request.args]):
 
+        default_start = request.args["startdate"]
+        default_end = request.args["enddate"]
+        convert_start = datetime.strptime(default_start, "%Y-%m-%d")
+        convert_end = datetime.strptime(default_end, "%Y-%m-%d")
+
+        # Validate the dates
+        if convert_start > convert_end:
+            flash("Please make sure the start date is before the end date.")
+            return render_template('edit.html', form=form, data=None, cols=None)
+
+        # Pull data and flash message if no data found
+        result = request.args
+        db_res = get_week_data(result)
+        if not db_res:
+            flash("no data found")
+        else:
+            data = id_records_schema.dump(db_res)
+            cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
+            return render_template('edit.html', form=form, data=data, cols=cols, ds=default_start, de=default_end)
+
+    return render_template('edit.html', form=form, data=data, cols=cols)
+
+
+@app.route('/delete', methods=['GET'])
+def delete():
     if 'remove' in request.args:
         cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
         data = RecordData.query.filter_by(id=int(request.args['lineIdEdit'])).first()
         data = id_record_schema.dump(data)
         return render_template('delete.html', data=data, col=cols)
 
-    else:
-        form = DatePickerForm()
-        if form.is_submitted():
-            # TODO: Add validators
-            result = request.form
-            db_res = get_week_data(result)
-            if not db_res:
-                flash("no data found")
-            else:
-                data = id_records_schema.dump(db_res)
-                cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
-                flash("found ur data")
-                return render_template('edittable.html', data=data, cols=cols)
 
-        return render_template('date.html', form=form)
-
+@app.route('/delete/<int:id>', methods=['GET', 'DELETE'])
+def delete_id(pk_id):
+    pass
 
 """Start of the API Routes"""
 

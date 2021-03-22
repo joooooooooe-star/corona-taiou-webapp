@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<form action="" method="GET" name="dateform">
+    <h3>Select a date range:</h3>
+    {{ form.csrt_token }}
+    {% if ds %}
+    {{ form.startdate.label }} {{form.startdate(class="DatePickerForm", value=ds)}} {{form.hidden_tag()}}
+    {{ form.enddate.label }} {{form.enddate(class="DatePickerForm", value=de)}} {{form.hidden_tag()}}
+    {% else %}
+    {{ form.startdate.label }} {{form.startdate(class="DatePickerForm")}} {{form.hidden_tag()}}
+    {{ form.enddate.label }} {{form.enddate(class="DatePickerForm")}} {{form.hidden_tag()}}
+    {% endif %}
+    <p>
+        {{form.submit()}}
+    </p>
+</form>
+</div>
+<div class="container">
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{message}}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+{% if data %}
+</div>
+<div class="container">
+    <form action="" method="GET" name="edit-remove">
+    <table>
+        <tr>
+            {% for col in cols %}
+            <th scope="col">{{ col }}</th>
+            {% endfor %}
+            <th scope="col">Action</th>
+            </tr>
+       </tr>
+        {% for datum in data %}
+            <tr>
+            {% for col in cols %}
+            <td>
+                {{ datum[col] }}
+            </td>
+            {% endfor %}
+                <td>
+                    <input id="lineIdEdit" name="lineIdEdit" type="hidden" value="{{datum['id']}}">
+                    <button name="edit" type="submit" value="true">Edit</button>
+                    <button name="remove" type="submit" value="true">Remove</button>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    </form>
+</div>
+{% endif %}
+{% endblock %}
