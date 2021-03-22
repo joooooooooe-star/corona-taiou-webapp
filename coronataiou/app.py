@@ -73,6 +73,41 @@ def add_record():
 def edit_table(data=None, cols=None):
     """The endpoint containing the feature to edit and remove data"""
 
+    if request.method == "POST":
+        change_form = AddRecord()
+        if change_form.validate_on_submit():
+            rec = RecordData.query.get(request.form['id_field'])
+            rec.name = request.form['name']
+            rec.temperature = request.form['temperature']
+            rec.fatigue = request.form['fatigue']
+            rec.sore_throat = request.form['sore_throat']
+            rec.other_pain = request.form['other_pain']
+
+            db.session.commit()
+
+            message = f"The data for {request.form['name']} has been submitted"
+
+            return render_template('add_record_temperature.html', message=message)
+        else:
+            for field, errors in change_form.errors.items():
+                for error in errors:
+                    flash("Error in {}: {}".format(
+                        getattr(change_form, field).label.text,
+                        error
+                    ), 'error')
+            return render_template('add_record_temperature.html', form1=change_form)
+
+    # The start point for when an ID is selected
+    if "edit" in request.args:
+        id_search = int(request.args["edit"])
+        query_res = RecordData.query.filter(RecordData.id==id_search).first()
+        data = id_record_schema.dump(query_res)
+        print(data)
+        change_form = AddRecord(old_data=data)
+
+        return render_template('add_record_temperature.html', form1=change_form)
+
+    # The start point for when dates are selected
     form = DatePickerForm()
 
     if all(["startdate" in request.args, "enddate" in request.args]):
@@ -112,6 +147,7 @@ def delete():
 @app.route('/delete/<int:id>', methods=['GET', 'DELETE'])
 def delete_id(pk_id):
     pass
+
 
 """Start of the API Routes"""
 

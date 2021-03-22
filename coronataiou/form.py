@@ -23,6 +23,16 @@ class AddRecord(FlaskForm):
     update = HiddenField()
     submit = SubmitField('Add/Update Record')
 
+    def __init__(self, old_data=None, *args, **kwargs):
+        super(AddRecord, self).__init__(*args, **kwargs)
+        if old_data:
+            self.id_field.data = old_data["id"]
+            self.name.data = old_data["name"]
+            self.temperature.data = old_data["temperature"]
+            self.fatigue.data = old_data["fatigue"]
+            self.sore_throat.data = old_data["sore_throat"]
+            self.other_pain.data = old_data["other_pain"]
+
 
 class DeleteForm(FlaskForm):
     id_filed = HiddenField()

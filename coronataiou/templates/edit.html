@@ -44,9 +44,8 @@
             </td>
             {% endfor %}
                 <td>
-                    <input id="lineIdEdit" name="lineIdEdit" type="hidden" value="{{datum['id']}}">
-                    <button name="edit" type="submit" value="true">Edit</button>
-                    <button name="remove" type="submit" value="true">Remove</button>
+                    <button name="edit" type="submit" value="{{datum['id']}}">Edit</button>
+                    <button name="remove" type="submit" value="{{datum['id']}}">Remove</button>
                 </td>
             </tr>
         {% endfor %}
