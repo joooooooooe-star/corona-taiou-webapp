@@ -44,7 +44,7 @@
               <a class="nav-link" href={{url_for("add_record")}}><b>Add</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/#"><b>Update</b></a>
+              <a class="nav-link" href="{{ url_for('edit_table') }}"><b>Update</b></a>
             </li>
             </li>
             <li class="nav-item">
@@ -77,7 +77,7 @@
                   </h1>
                   <form>
 
-                    <a href="/input" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Temperature details</a>
+                    <a href={{url_for("add_record")}} class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Temperature details</a>
                     <div class="text-center"></div>
                       <br>
 
