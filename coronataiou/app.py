@@ -1,6 +1,6 @@
 """The entry point for the application"""
 
-from flask import Flask, jsonify, render_template, request, flash, abort
+from flask import Flask, jsonify, render_template, request, flash, redirect, url_for, abort
 from flask_bootstrap import Bootstrap
 from datetime import datetime, timedelta
 
@@ -96,12 +96,16 @@ def edit_table(data=None, cols=None):
     # The start point for when an ID is selected
     if "edit" in request.args:
         id_search = int(request.args["edit"])
-        query_res = RecordData.query.filter(RecordData.id==id_search).first()
+        query_res = RecordData.query.filter(RecordData.id == id_search).first()
         data = id_record_schema.dump(query_res)
         print(data)
         change_form = AddRecord(old_data=data)
 
         return render_template('add_record_temperature.html', form1=change_form)
+
+    # redirect to delete if delete button clicked
+    if "delete" in request.args:
+        return redirect(url_for('delete', code=307, db_id=request.args['delete']))
 
     # The start point for when dates are selected
     form = DatePickerForm()
@@ -131,18 +135,17 @@ def edit_table(data=None, cols=None):
     return render_template('edit.html', form=form, data=data, cols=cols)
 
 
-@app.route('/delete', methods=['GET'])
-def delete():
-    if 'remove' in request.args:
-        cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
-        data = RecordData.query.filter_by(id=int(request.args['lineIdEdit'])).first()
-        data = id_record_schema.dump(data)
-        return render_template('delete.html', data=data, col=cols)
+@app.route('/delete/<int:db_id>', methods=['GET', 'POST'])
+def delete(db_id):
+    if request.method == "POST":
+        if "cancel" in request.form:
+            return redirect(url_for("edit_table", code=303))
 
-
-@app.route('/delete/<int:id>', methods=['GET', 'DELETE'])
-def delete_id(pk_id):
-    pass
+    cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
+    data = RecordData.query.get(db_id)
+    data = id_record_schema.dump(data)
+    print(data)
+    return render_template('delete.html', data=data, cols=cols)
 
 
 """Start of the API Routes"""
