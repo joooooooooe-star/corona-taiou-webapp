@@ -105,7 +105,7 @@ def edit_table(data=None, cols=None):
 
     # redirect to delete if delete button clicked
     if "delete" in request.args:
-        return redirect(url_for('delete', code=307, db_id=request.args['delete']))
+        return redirect(url_for('delete', db_id=request.args['delete']), code=307)
 
     # The start point for when dates are selected
     form = DatePickerForm()
@@ -139,12 +139,16 @@ def edit_table(data=None, cols=None):
 def delete(db_id):
     if request.method == "POST":
         if "cancel" in request.form:
-            return redirect(url_for("edit_table", code=303))
+            return redirect(url_for("edit_table"), code=303)
+
+        if "delete" in request.form:
+            # TODO: データベースから削除　コード
+            message = "The data has been deleted."
+            return render_template('delete.html', message=message)
 
     cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
     data = RecordData.query.get(db_id)
     data = id_record_schema.dump(data)
-    print(data)
     return render_template('delete.html', data=data, cols=cols)
 
 
