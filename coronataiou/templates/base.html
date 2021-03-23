@@ -37,7 +37,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="/home"><b>Home</b>
+              <a class="nav-link" href="{{ url_for('index') }}"><b>Home</b>
                     <span class="sr-only">(current)</span>
                   </a>
             <li class="nav-item">
@@ -48,10 +48,10 @@
             </li>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/about"><b>About</b></a>
+              <a class="nav-link" href="{{ url_for('about') }}"><b>About</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/contact"><b>Contact</b></a>
+              <a class="nav-link" href="{{ url_for('contact') }}"><b>Contact</b></a>
             </li>
           </ul>
         </div>
