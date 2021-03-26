@@ -129,8 +129,16 @@ def edit_table(data=None, cols=None):
             flash("no data found")
         else:
             data = id_records_schema.dump(db_res)
+
+            # reformat date
+            for datum in data:
+                datum["updated"] = datum["updated"][:10]
+
             cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
-            return render_template('edit.html', form=form, data=data, cols=cols, ds=default_start, de=default_end)
+            names = ('id', 'Name', 'Body Temperature', 'Sore Throat Pain?', 'Feeling Fatigue?', 'Other Pain?', 'Submission Date')
+            table_header = dict(zip(cols, names))
+
+            return render_template('edit.html', form=form, data=data, cols=cols, th=table_header, ds=default_start, de=default_end)
 
     return render_template('edit.html', form=form, data=data, cols=cols)
 
@@ -147,9 +155,12 @@ def delete(db_id):
             return render_template('delete.html', message=message)
 
     cols = ('id', 'name', 'temperature', 'sore_throat', 'fatigue', 'other_pain', 'updated')
+    names = ('id', 'Name', 'Body Temperature', 'Sore Throat Pain?', 'Feeling Fatigue?', 'Other Pain?', 'Submission Date')
+    table_header = dict(zip(cols, names))
+
     data = RecordData.query.get(db_id)
     data = id_record_schema.dump(data)
-    return render_template('delete.html', data=data, cols=cols)
+    return render_template('delete.html', data=data, cols=cols, th=table_header)
 
 
 """Start of the API Routes"""
@@ -185,7 +196,7 @@ def get_date(year, month, day):
 def get_week_data(result: dict) -> dict:
     convert_start = datetime.strptime(result["startdate"], "%Y-%m-%d") - timedelta(hours=9)
     convert_end = datetime.strptime(result["enddate"], "%Y-%m-%d") + timedelta(hours=13)
-    query_res = RecordData.query.filter(RecordData.updated >= convert_start).filter(RecordData.updated <= convert_end).all()
+    query_res = RecordData.query.filter(RecordData.updated >= convert_start).filter(RecordData.updated <= convert_end).order_by(RecordData.updated.desc()).all()
 
     return query_res
 
