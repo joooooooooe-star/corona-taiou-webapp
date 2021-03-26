@@ -9,7 +9,6 @@ from coronataiou.models import db, ma, RecordData, RecordSchema, IdRecordSchema
 from coronataiou.forms import AddRecord, DatePickerForm
 
 app = Flask(__name__)
-app.config["DEBUG"] = True
 app.config['SECRET_KEY'] = os.environ.get("FLSK_SECRET_KEY", "MLXH243GssUWwKdTWS7FDhdwYF56wPj8")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///healthdata.db'
