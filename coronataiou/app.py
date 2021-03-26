@@ -101,7 +101,6 @@ def edit_table(data=None, cols=None):
         id_search = int(request.args["edit"])
         query_res = RecordData.query.filter(RecordData.id == id_search).first()
         data = id_record_schema.dump(query_res)
-        print(data)
         change_form = AddRecord(old_data=data)
 
         return render_template('add_record_temperature.html', form1=change_form)
