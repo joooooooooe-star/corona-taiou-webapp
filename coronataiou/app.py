@@ -153,7 +153,9 @@ def delete(db_id):
             return redirect(url_for("edit_table"), code=303)
 
         if "delete" in request.form:
-            # TODO: データベースから削除　コード
+            data = RecordData.query.get(db_id)
+            db.session.commit(data)
+            db.session.commit()
             message = "The data has been deleted."
             return render_template('delete.html', message=message)
 
