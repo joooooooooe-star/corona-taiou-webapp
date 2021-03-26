@@ -1,3 +1,8 @@
+/* Layout for index page
+-------------------------------------------------- */
+
+
+
 :root {
   --input-padding-x: 1.5rem;
   --input-padding-y: 0.75rem;
@@ -111,7 +116,7 @@
   }
 }
 
-/* Input page
+/* Input page layout
 -------------------------------------------------- */
 
 :root {
@@ -119,10 +124,7 @@
   --input-padding-y: .75rem;
 }
 
-body
-{
-  background: #E0E0E0;
-}
+
 
 .card-signin {
   border: 0;
