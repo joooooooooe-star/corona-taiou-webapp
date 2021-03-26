@@ -154,7 +154,7 @@ def delete(db_id):
 
         if "delete" in request.form:
             data = RecordData.query.get(db_id)
-            db.session.commit(data)
+            db.session.delete(data)
             db.session.commit()
             message = "The data has been deleted."
             return render_template('delete.html', message=message)
