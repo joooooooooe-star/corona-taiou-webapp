@@ -5,7 +5,6 @@ from flask_bootstrap import Bootstrap
 from datetime import datetime, timedelta
 import os
 import urllib.parse
-import pyodbc
 
 from coronataiou.models import db, ma, RecordData, RecordSchema, IdRecordSchema
 from coronataiou.forms import AddRecord, DatePickerForm
