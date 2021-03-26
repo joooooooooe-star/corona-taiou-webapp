@@ -4,15 +4,20 @@ from flask import Flask, jsonify, render_template, request, flash, redirect, url
 from flask_bootstrap import Bootstrap
 from datetime import datetime, timedelta
 import os
+import urllib.parse
 
 from coronataiou.models import db, ma, RecordData, RecordSchema, IdRecordSchema
 from coronataiou.forms import AddRecord, DatePickerForm
 
+params = urllib.parse.quote_plus(os.environ.get("SQLAZURECONNSTR_WWIF", ""))
+
 app = Flask(__name__)
 app.config["DEBUG"] = True
 app.config['SECRET_KEY'] = os.environ.get("FLSK_SECRET_KEY", "MLXH243GssUWwKdTWS7FDhdwYF56wPj8")
+
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///healthdata.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mssql+pyodbc:///?odbc_connect={params}"
 db.init_app(app)
 ma.init_app(app)
 
