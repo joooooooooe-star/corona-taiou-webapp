@@ -14,7 +14,7 @@ flask-marshmallow==0.14.0
 Flask-SQLAlchemy==2.4.4
 Flask-WTF==0.14.3
 gunicorn==20.0.4
-idna==3.1
+idna==2.10
 infinity==1.5
 iniconfig==1.1.1
 intervals==0.9.1
