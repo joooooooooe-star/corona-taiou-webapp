@@ -1,17 +1,21 @@
 """The entry point for the application"""
 
-from flask import Flask, jsonify, render_template, request, flash, redirect, url_for, abort
+from flask import Flask, jsonify, render_template, request, flash, redirect, url_for
 from flask_bootstrap import Bootstrap
 from datetime import datetime, timedelta
 import os
+import urllib.parse
 
 from coronataiou.models import db, ma, RecordData, RecordSchema, IdRecordSchema
 from coronataiou.forms import AddRecord, DatePickerForm
 
+params = urllib.parse.quote_plus(os.environ.get("SQLAZURECONNSTRPG", ""))
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLSK_SECRET_KEY", "MLXH243GssUWwKdTWS7FDhdwYF56wPj8")
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///healthdata.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = "".join(["postgresql://galileo@pg-corona-taiou:", params, "@pg-corona-taiou.postgres.database.azure.com/log_data"])
 db.init_app(app)
 ma.init_app(app)
 
@@ -36,9 +40,11 @@ def index():
 def about():
     return render_template('about.html')
 
+
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
+
 
 @app.route('/add_record', methods=['GET', 'POST'])
 def add_record():
