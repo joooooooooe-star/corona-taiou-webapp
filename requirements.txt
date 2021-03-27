@@ -25,6 +25,7 @@ marshmallow==3.10.0
 marshmallow-sqlalchemy==0.24.2
 packaging==20.9
 pluggy==0.13.1
+psycopg2==2.8.6
 py==1.10.0
 pyodbc==4.0.30
 pyparsing==2.4.7
